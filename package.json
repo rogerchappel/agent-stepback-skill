@@ -1,0 +1,39 @@
+{
+  "name": "agent-stepback-skill",
+  "version": "0.1.0",
+  "description": "Turn agent run notes into a compact stepback checkpoint with facts, blockers, assumptions, and next safe actions.",
+  "type": "module",
+  "bin": {
+    "agent-stepback": "./bin/agent-stepback.js"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check-package.js",
+    "build": "node scripts/build.js",
+    "smoke": "node bin/agent-stepback.js fixtures/run-notes.md --format markdown",
+    "validate": "bash scripts/validate.sh"
+  },
+  "keywords": [
+    "agent",
+    "checkpoint",
+    "handoff",
+    "redaction",
+    "skill"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "bin",
+    "docs",
+    "fixtures",
+    "scripts",
+    "src",
+    "SKILL.md",
+    "README.md"
+  ]
+}
