@@ -6,6 +6,7 @@ export function createCheckpoint(transcript, options = {}) {
   const source = options.source ?? "inline";
   const lines = redact(transcript)
     .split(/\r?\n/)
+    .filter((line) => !/^#{1,6}\s+/.test(line))
     .map((line) => line.replace(/^[-*]\s+/, "").trim())
     .filter(Boolean);
 

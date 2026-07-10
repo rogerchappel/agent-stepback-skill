@@ -17,7 +17,7 @@ export const SECTIONS = [
   {
     key: "assumptions",
     title: "Risky Assumptions",
-    pattern: /\b(assume|assuming|unclear|unknown|maybe|risk|likely)\b/i
+    pattern: /\b(assume|assumption|assuming|unclear|unknown|maybe|risk|likely)\b/i
   },
   {
     key: "nextActions",
