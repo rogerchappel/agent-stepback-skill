@@ -7,6 +7,7 @@ Create a compact checkpoint from agent run notes: facts, decisions, blockers, ri
 ```bash
 npm test
 npm run smoke
+npm run release:check
 node bin/agent-stepback.js fixtures/run-notes.md --format json --max-items 3
 ```
 
@@ -25,3 +26,13 @@ The CLI reads one explicit local file and prints to stdout. It does not call mod
 ## Limitations
 
 Classification is keyword-based. The checkpoint is a recovery aid, not a complete semantic summary.
+
+## Release Verification
+
+Run the full local release gate before publishing, tagging, or handing the package to another agent:
+
+```bash
+npm run release:check
+```
+
+The release check runs package metadata and pack-content assertions, the Node test suite, build validation, CLI smoke coverage, and a JSON fixture smoke.
