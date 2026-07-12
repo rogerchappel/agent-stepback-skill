@@ -14,7 +14,8 @@
     "check": "node scripts/check-package.js",
     "build": "node scripts/build.js",
     "smoke": "node bin/agent-stepback.js fixtures/run-notes.md --format markdown",
-    "validate": "bash scripts/validate.sh"
+    "validate": "bash scripts/validate.sh",
+    "release:check": "npm run check && npm test && npm run build && npm run smoke && node bin/agent-stepback.js fixtures/run-notes.md --format json --max-items 2 >/tmp/agent-stepback-smoke.json"
   },
   "keywords": [
     "agent",
@@ -43,6 +44,8 @@
     "scripts",
     "src",
     "SKILL.md",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ]
 }
