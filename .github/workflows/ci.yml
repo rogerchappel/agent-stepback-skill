@@ -21,11 +21,5 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: Check
-        run: npm run check
-
-      - name: Test
-        run: npm test
-
-      - name: Smoke
-        run: npm run smoke
+      - name: Release check
+        run: npm run release:check
