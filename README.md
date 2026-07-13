@@ -19,6 +19,19 @@ import { createCheckpoint } from "agent-stepback-skill";
 const checkpoint = createCheckpoint(transcript, { source: "run.md", maxItems: 4 });
 ```
 
+## Verification
+
+Run the same checks used for release-readiness before publishing or opening a release PR:
+
+```bash
+npm run check
+npm test
+npm run build
+npm run smoke
+npm run release:check
+npm pack --dry-run
+```
+
 ## Safety Notes
 
 The CLI reads one explicit local file and prints to stdout. It does not call models, browse, send messages, or mutate repositories. Secret-looking strings are redacted before classification and output.
