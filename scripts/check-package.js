@@ -6,7 +6,7 @@ for (const field of ["name", "version", "description", "bin", "exports", "licens
   if (!pkg[field]) throw new Error(`package.json missing ${field}`);
 }
 
-for (const path of ["README.md", "SKILL.md", "CHANGELOG.md", "docs/PRD.md", "docs/TASKS.md", "docs/ORCHESTRATION.md"]) {
+for (const path of ["README.md", "SKILL.md", "CHANGELOG.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "docs/PRD.md", "docs/TASKS.md", "docs/ORCHESTRATION.md"]) {
   await access(path);
 }
 
@@ -30,7 +30,11 @@ const required = [
   "docs/RC_VERIFICATION.md",
   "SKILL.md",
   "README.md",
+  "LICENSE",
   "CHANGELOG.md",
+  "CONTRIBUTING.md",
+  "SECURITY.md",
+  "CODE_OF_CONDUCT.md",
   "package.json",
 ];
 const missing = required.filter((path) => !packed.has(path));
