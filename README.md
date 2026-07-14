@@ -28,6 +28,7 @@ npm run check
 npm test
 npm run build
 npm run smoke
+npm run package:smoke
 npm run release:check
 npm pack --dry-run
 ```
@@ -48,4 +49,4 @@ Run the full local release gate before publishing, tagging, or handing the packa
 npm run release:check
 ```
 
-The release check runs package metadata and pack-content assertions, the Node test suite, build validation, CLI smoke coverage, and a JSON fixture smoke.
+The release check runs package metadata and pack-content assertions, the Node test suite, build validation, CLI smoke coverage, a JSON fixture smoke, and a package dry-run that verifies the npm tarball includes the support docs a downstream user needs.
