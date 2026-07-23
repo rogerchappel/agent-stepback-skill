@@ -10,4 +10,12 @@ Please use GitHub private vulnerability reporting when available. If you open a 
 
 ## Scope
 
-The CLI reads one explicit local notes file, redacts secret-looking values, and writes a checkpoint report to stdout. It should not call models, browse, send messages, write repositories, or contact external APIs.
+The CLI reads one explicit local notes file, redacts supported secret-looking values before
+classification, and writes a checkpoint report to stdout. Supported forms include common
+provider-prefixed tokens, GitHub fine-grained PATs, Bearer credentials, compact JWT-style
+values, email addresses, and named key-value secrets. See
+[the redaction documentation](docs/REDACTION.md) for the exact coverage and limitations.
+
+The CLI should not call models, browse, send messages, write repositories, or contact external
+APIs. Redaction is best-effort and is not a substitute for keeping sensitive notes out of
+untrusted systems.

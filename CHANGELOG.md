@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Redact GitHub fine-grained PATs, Bearer credentials, and compact JWT-style values before checkpoint output.
 - Add release-readiness checks for package metadata, pack contents, and CI verification.
 All notable changes to this project will be documented in this file.
 
