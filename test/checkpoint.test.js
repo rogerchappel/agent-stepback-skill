@@ -15,6 +15,40 @@ test("checkpoint extracts facts, decisions, blockers, assumptions, and actions",
   assert.equal(checkpoint.summary.redacted, true);
 });
 
+test("checkpoint rejects invalid maxItems values", () => {
+  for (const maxItems of ["bogus", Number.NaN, 0, -1, 1.5]) {
+    assert.throws(
+      () => createCheckpoint("Confirmed one.", { maxItems }),
+      {
+        name: "RangeError",
+        message: "maxItems must be a positive integer"
+      },
+      `expected ${String(maxItems)} to be rejected`
+    );
+  }
+});
+
+test("checkpoint preserves maxItems and caps every section in formatted output", () => {
+  const transcript = [
+    "Confirmed one.",
+    "Confirmed two.",
+    "Decided one.",
+    "Decided two.",
+    "Failed one.",
+    "Failed two.",
+    "Assumption one.",
+    "Assumption two.",
+    "Next one.",
+    "Next two."
+  ].join("\n");
+  const checkpoint = createCheckpoint(transcript, { maxItems: 1 });
+
+  assert.equal(checkpoint.summary.maxItems, 1);
+  for (const items of Object.values(checkpoint.sections)) assert.ok(items.length <= 1);
+  assert.equal(JSON.parse(formatJson(checkpoint)).summary.maxItems, 1);
+  assert.match(formatMarkdown(checkpoint), /max items: 1/);
+});
+
 test("redaction hides token-like and email-like values", () => {
   const value = redact("token=ghp_1234567890abcdefghijklmnop email test@example.com");
 
