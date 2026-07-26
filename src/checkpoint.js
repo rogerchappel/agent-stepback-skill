@@ -3,6 +3,9 @@ import { redact } from "./redact.js";
 
 export function createCheckpoint(transcript, options = {}) {
   const maxItems = Number(options.maxItems ?? 5);
+  if (!Number.isInteger(maxItems) || maxItems < 1) {
+    throw new RangeError("maxItems must be a positive integer");
+  }
   const source = options.source ?? "inline";
   const lines = redact(transcript)
     .split(/\r?\n/)
