@@ -19,6 +19,10 @@ import { createCheckpoint } from "agent-stepback-skill";
 const checkpoint = createCheckpoint(transcript, { source: "run.md", maxItems: 4 });
 ```
 
+`maxItems` defaults to `5` and must be a positive integer. Numeric strings are accepted for
+consistency with CLI input; invalid, zero, negative, and fractional values throw a `RangeError`.
+The limit applies independently to every checkpoint section.
+
 ## Verification
 
 Run the same checks used for release-readiness before publishing or opening a release PR:
