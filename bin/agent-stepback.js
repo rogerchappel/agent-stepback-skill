@@ -84,5 +84,9 @@ Options:
   --format markdown|json   Output format. Defaults to markdown.
   --max-items N            Max items per section. Defaults to 5.
   -h, --help               Show this help.
+
+Errors:
+  Exit 2 for invalid usage; exit 1 when the input cannot be read or processing fails.
+  Diagnostics are written to stderr; successful checkpoint output is written to stdout.
 `);
 }

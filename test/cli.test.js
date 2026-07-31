@@ -38,6 +38,15 @@ test("CLI emits Markdown by default", () => {
   assert.match(result.stdout, /# Agent Stepback Checkpoint/);
 });
 
+test("CLI help documents error output and exit statuses", () => {
+  const result = runCli("--help");
+
+  assert.equal(result.status, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /Exit 2 for invalid usage; exit 1 when the input cannot be read/);
+  assert.match(result.stdout, /Diagnostics are written to stderr/);
+});
+
 test("CLI redacts credentials from JSON and Markdown output", (t) => {
   const directory = mkdtempSync(join(tmpdir(), "agent-stepback-redaction-"));
   t.after(() => rmSync(directory, { recursive: true, force: true }));

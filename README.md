@@ -11,6 +11,11 @@ npm run release:check
 node bin/agent-stepback.js fixtures/run-notes.md --format json --max-items 3
 ```
 
+The CLI writes checkpoint output to stdout and diagnostics prefixed with `agent-stepback:` to
+stderr. Invalid options, values, or positional arguments exit with status `2`. Missing or
+unreadable input and processing failures exit with status `1`. These failures do not print
+JavaScript stack traces. Run `agent-stepback --help` for the complete command summary.
+
 ## Library
 
 ```js
