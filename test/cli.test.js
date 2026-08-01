@@ -5,6 +5,17 @@ import { join } from "node:path";
 import test from "node:test";
 import assert from "node:assert/strict";
 
+function runCli(...args) {
+  return spawnSync(process.execPath, ["bin/agent-stepback.js", ...args], { encoding: "utf8" });
+}
+
+function assertCliError(result, { status, message }) {
+  assert.equal(result.status, status);
+  assert.equal(result.stdout, "");
+  assert.equal(result.stderr, `agent-stepback: ${message}\n`);
+  assert.doesNotMatch(result.stderr, /\n\s+at |node:internal|Error:/);
+}
+
 test("CLI emits JSON checkpoint", () => {
   const result = spawnSync(
     process.execPath,
@@ -25,6 +36,15 @@ test("CLI emits Markdown by default", () => {
 
   assert.equal(result.status, 0);
   assert.match(result.stdout, /# Agent Stepback Checkpoint/);
+});
+
+test("CLI help documents error output and exit statuses", () => {
+  const result = runCli("--help");
+
+  assert.equal(result.status, 0);
+  assert.equal(result.stderr, "");
+  assert.match(result.stdout, /Exit 2 for invalid usage; exit 1 when the input cannot be read/);
+  assert.match(result.stdout, /Diagnostics are written to stderr/);
 });
 
 test("CLI redacts credentials from JSON and Markdown output", (t) => {
@@ -50,4 +70,31 @@ test("CLI redacts credentials from JSON and Markdown output", (t) => {
     assert.equal(result.stdout.includes(jwt), false);
     assert.match(result.stdout, /\[REDACTED\]/);
   }
+});
+
+test("CLI reports usage errors without stack traces", () => {
+  const cases = [
+    { args: ["fixtures/run-notes.md", "--wat"], message: "unknown option: --wat" },
+    { args: ["fixtures/run-notes.md", "--format"], message: "--format requires a value" },
+    { args: ["fixtures/run-notes.md", "--format", "yaml"], message: "--format must be one of: markdown, json" },
+    { args: ["fixtures/run-notes.md", "--max-items"], message: "--max-items requires a value" },
+    { args: ["fixtures/run-notes.md", "--max-items", "zero"], message: "--max-items must be a positive integer" },
+    { args: ["fixtures/run-notes.md", "extra.md"], message: "unexpected argument: extra.md" },
+    { args: [], message: "missing transcript file; run with --help for usage" }
+  ];
+
+  for (const { args, message } of cases) {
+    assertCliError(runCli(...args), { status: 2, message });
+  }
+});
+
+test("CLI reports input errors without stack traces", () => {
+  assertCliError(runCli("fixtures/does-not-exist.md"), {
+    status: 1,
+    message: "cannot read fixtures/does-not-exist.md"
+  });
+  assertCliError(runCli("fixtures"), {
+    status: 1,
+    message: "cannot read fixtures"
+  });
 });
