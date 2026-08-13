@@ -42,6 +42,9 @@ npm run release:check
 npm pack --dry-run
 ```
 
+CI runs the complete `release:check` gate on Node.js 20, the minimum version declared by the
+package, and Node.js 24, the current runtime.
+
 ## Safety Notes
 
 The CLI reads one explicit local file and prints to stdout. It does not call models, browse, send messages, or mutate repositories. Secret-looking strings are redacted before classification and output.
@@ -58,4 +61,4 @@ Run the full local release gate before publishing, tagging, or handing the packa
 npm run release:check
 ```
 
-The release check runs package metadata and pack-content assertions, the Node test suite, build validation, CLI smoke coverage, a JSON fixture smoke, and a package dry-run that verifies the npm tarball includes the support docs a downstream user needs.
+The release check runs package metadata and engine-floor assertions, pack-content assertions, the Node test suite, build validation, CLI smoke coverage, a JSON fixture smoke, and a package dry-run that verifies the npm tarball includes the support docs a downstream user needs.
