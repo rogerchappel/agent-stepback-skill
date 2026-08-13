@@ -6,6 +6,10 @@ for (const field of ["name", "version", "description", "bin", "exports", "licens
   if (!pkg[field]) throw new Error(`package.json missing ${field}`);
 }
 
+if (pkg.engines?.node !== ">=20") {
+  throw new Error('package.json engines.node must be ">=20"');
+}
+
 for (const path of ["README.md", "SKILL.md", "CHANGELOG.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "docs/PRD.md", "docs/TASKS.md", "docs/ORCHESTRATION.md"]) {
   await access(path);
 }
