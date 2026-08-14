@@ -5,6 +5,7 @@ Create a compact checkpoint from agent run notes: facts, decisions, blockers, ri
 ## Quickstart
 
 ```bash
+npm ci
 npm test
 npm run smoke
 npm run release:check

@@ -15,6 +15,10 @@ Keep changes deterministic and local-first.
 
 ## Before Opening a PR
 
+Install the exact dependency tree recorded in `package-lock.json`, then run the local validation
+gate:
+
 ```bash
+npm ci
 npm run validate
 ```
