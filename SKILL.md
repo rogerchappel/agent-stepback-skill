@@ -9,7 +9,7 @@ Use this skill when an agent run has become long, noisy, blocked, or uncertain a
 
 ## Required Tools
 
-- Node.js 20 or newer.
+- Node.js 22 or newer.
 - Local filesystem read access to the transcript file.
 
 ## Side-Effect Boundaries
