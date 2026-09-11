@@ -36,7 +36,7 @@
   },
   "homepage": "https://github.com/rogerchappel/agent-stepback-skill#readme",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "files": [
     "bin",

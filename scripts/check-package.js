@@ -6,8 +6,18 @@ for (const field of ["name", "version", "description", "bin", "exports", "licens
   if (!pkg[field]) throw new Error(`package.json missing ${field}`);
 }
 
-if (pkg.engines?.node !== ">=20") {
-  throw new Error('package.json engines.node must be ">=20"');
+if (pkg.engines?.node !== ">=22") {
+  throw new Error('package.json engines.node must be ">=22"');
+}
+
+const ciWorkflow = await readFile(".github/workflows/ci.yml", "utf8");
+const matrix = ciWorkflow
+  .match(/node-version:\s*\[([^\]]+)\]/)[1]
+  .split(",")
+  .map((value) => Number(value.trim()));
+const engineFloor = Number(pkg.engines.node.replace(">=", ""));
+if (matrix.length === 0 || matrix.some((version) => version < engineFloor) || Math.min(...matrix) !== engineFloor) {
+  throw new Error(`CI node-version matrix ${JSON.stringify(matrix)} must start at the engines.node floor ${engineFloor}`);
 }
 
 for (const path of ["README.md", "SKILL.md", "CHANGELOG.md", "CONTRIBUTING.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "docs/PRD.md", "docs/TASKS.md", "docs/ORCHESTRATION.md"]) {
