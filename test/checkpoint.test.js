@@ -49,6 +49,20 @@ test("checkpoint preserves maxItems and caps every section in formatted output",
   assert.match(formatMarkdown(checkpoint), /max items: 1/);
 });
 
+test("checkpoint reuses the redacted transcript and reports whether it changed", () => {
+  const plainTranscript = "Confirmed the ordinary release plan.";
+  const plain = createCheckpoint(plainTranscript);
+  assert.equal(plain.summary.redacted, false);
+  assert.ok(plain.sections.facts.includes(plainTranscript));
+
+  const credential = "ghp_1234567890abcdefghijklmnop";
+  const sensitiveTranscript = `Confirmed token=${credential} remains active.`;
+  const redacted = createCheckpoint(sensitiveTranscript);
+  assert.equal(redacted.summary.redacted, true);
+  assert.equal(redacted.sections.facts[0], "Confirmed [REDACTED] remains active.");
+  assert.equal(redacted.sections.facts[0].includes(credential), false);
+});
+
 test("redaction hides token-like and email-like values", () => {
   const value = redact("token=ghp_1234567890abcdefghijklmnop email test@example.com");
 
