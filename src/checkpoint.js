@@ -7,7 +7,8 @@ export function createCheckpoint(transcript, options = {}) {
     throw new RangeError("maxItems must be a positive integer");
   }
   const source = options.source ?? "inline";
-  const lines = redact(transcript)
+  const redactedTranscript = redact(transcript);
+  const lines = redactedTranscript
     .split(/\r?\n/)
     .filter((line) => !/^#{1,6}\s+/.test(line))
     .map((line) => line.replace(/^[-*]\s+/, "").trim())
@@ -18,7 +19,7 @@ export function createCheckpoint(transcript, options = {}) {
     summary: {
       inputLines: lines.length,
       maxItems,
-      redacted: transcript !== redact(transcript)
+      redacted: transcript !== redactedTranscript
     },
     sections: Object.fromEntries(SECTIONS.map((section) => [section.key, []])),
     handoff: ""
