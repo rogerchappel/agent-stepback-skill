@@ -12,8 +12,9 @@ async function loadContext() {
   const pkg = JSON.parse(pkgText);
   const engines = pkg.engines.node;
   const floor = Number(engines.replace(">=", ""));
-  const matrix = ci
-    .match(/node-version:\s*\[([^\]]+)\]/)[1]
+  const matrixMatch = ci.match(/node-version:\s*\[([^\]]+)\]/);
+  assert.ok(matrixMatch, "CI must define a bracketed node-version matrix");
+  const matrix = matrixMatch[1]
     .split(",")
     .map((value) => Number(value.trim()));
   return { engines, floor, matrix, readme, skill };
@@ -41,4 +42,25 @@ test("README and SKILL state the same runtime support range as CI and engines", 
   assert.doesNotMatch(readme, /gate on Node\.js 20/);
   assert.match(readme, /Node\.js 22/);
   assert.match(readme, /Node\.js 26/);
+});
+
+test("package check reports a clear error when the CI runtime matrix is absent", async () => {
+  const { spawnSync } = await import("node:child_process");
+  const { mkdtemp, cp, readFile, writeFile, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const root = await mkdtemp(join(tmpdir(), "stepback-matrix-"));
+  const repo = process.cwd();
+  try {
+    await cp(repo, root, { recursive: true, filter: (source) => !source.includes("node_modules") && !source.includes(".git") });
+    const workflow = join(root, ".github/workflows/ci.yml");
+    await (await import("node:fs/promises")).mkdir(join(root, ".github/workflows"), { recursive: true });
+    await cp(join(repo, ".github/workflows/ci.yml"), workflow);
+    await writeFile(workflow, (await readFile(workflow, "utf8")).replace(/node-version:\s*\[[^\]]+\]/, "node-version: 22"));
+    const result = spawnSync(process.execPath, ["scripts/check-package.js"], { cwd: root, encoding: "utf8" });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /CI workflow must define node-version/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });

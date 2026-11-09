@@ -11,12 +11,15 @@ if (pkg.engines?.node !== ">=22") {
 }
 
 const ciWorkflow = await readFile(".github/workflows/ci.yml", "utf8");
-const matrix = ciWorkflow
-  .match(/node-version:\s*\[([^\]]+)\]/)[1]
+const matrixMatch = ciWorkflow.match(/node-version:\s*\[([^\]]+)\]/);
+if (!matrixMatch) {
+  throw new Error("CI workflow must define node-version as a non-empty bracketed matrix");
+}
+const matrix = matrixMatch[1]
   .split(",")
   .map((value) => Number(value.trim()));
 const engineFloor = Number(pkg.engines.node.replace(">=", ""));
-if (matrix.length === 0 || matrix.some((version) => version < engineFloor) || Math.min(...matrix) !== engineFloor) {
+if (matrix.length === 0 || matrix.some((version) => !Number.isInteger(version) || version < engineFloor) || Math.min(...matrix) !== engineFloor) {
   throw new Error(`CI node-version matrix ${JSON.stringify(matrix)} must start at the engines.node floor ${engineFloor}`);
 }
 
