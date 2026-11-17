@@ -20,9 +20,9 @@ async function loadContext() {
   return { engines, floor, matrix, readme, skill };
 }
 
-test("CI matrix covers Node 26 alongside the maintained LTS lines", async () => {
+test("CI matrix covers Node 27 alongside the maintained LTS lines", async () => {
   const { matrix } = await loadContext();
-  assert.deepEqual(matrix, [22, 24, 26]);
+  assert.deepEqual(matrix, [22, 24, 26, 27]);
 });
 
 test("engines floor excludes EOL runtimes and matches the oldest CI-tested major", async () => {
@@ -42,6 +42,7 @@ test("README and SKILL state the same runtime support range as CI and engines", 
   assert.doesNotMatch(readme, /gate on Node\.js 20/);
   assert.match(readme, /Node\.js 22/);
   assert.match(readme, /Node\.js 26/);
+  assert.match(readme, /Node\.js 27/);
 });
 
 test("package check reports a clear error when the CI runtime matrix is absent", async () => {

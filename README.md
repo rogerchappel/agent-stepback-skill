@@ -45,7 +45,8 @@ npm pack --dry-run
 
 CI runs the complete `release:check` gate on Node.js 22 (the oldest maintained LTS line and the
 floor declared by the package), Node.js 24 (the active LTS line), and Node.js 26 (the current
-runtime). Node.js 20 reached end of life on 2026-04-30 and is no longer supported.
+runtime), and Node.js 27 (the newest supported major).
+Node.js 20 reached end of life on 2026-04-30 and is no longer supported.
 
 ## Safety Notes
 
